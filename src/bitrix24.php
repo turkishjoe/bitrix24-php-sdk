@@ -1129,12 +1129,14 @@ class Bitrix24 implements iBitrix24
     public function call($methodName, array $additionalParameters = array())
     {
         try {
-            $result = $this->getWebhookUsage()  ? $this->_call_webhook($methodName, $additionalParameters)
-                : $this->_call($methodName, $additionalParameters);
 
             if (is_callable($this->_onCallApiMethod)) {
                 call_user_func($this->_onCallApiMethod, $this, $methodName);
             }
+
+            $result = $this->getWebhookUsage()  ? $this->_call_webhook($methodName, $additionalParameters)
+                : $this->_call($methodName, $additionalParameters);
+
 
         } catch (Bitrix24TokenIsExpiredException $e) {
             if (!is_callable($this->_onExpiredToken)) {
